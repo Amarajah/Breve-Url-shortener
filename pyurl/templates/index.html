@@ -1,0 +1,79 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breve</title>
+    <link rel="icon" href="{% static 'link.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <section class="one">
+        <div id="header">
+            <img id="img-one" src="{% static 'link.png' %}" alt="{{ link }}">
+            <h1>BREVE.</h1>
+        </div>
+        <h3 id="paragraph">Trim your URLs, unleash the power of BREVE.</h3>
+        <div id="image-section">
+            <img src="{% static 'cloud.png' %}" alt="{{ cloud }}" id="img-two">
+        </div>
+    </section>
+
+    <section class="two">
+        <div id="form-wrapper">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="formfield" action="{% url 'shorten' %}">
+                <input type="url" placeholder="Paste your URL here" name="url" required>
+                <img src="{% static 'upload.png' %}" class="images" alt="Upload" id="uploadButton"  onclick="">
+                </div>
+                <br>
+                {% if short_url %}
+                <div class="formfield">
+                <input type="url" id="short_url" value="{{ short_url }}" readonly>
+                <img src="{% static 'download.png' %}" class="images" name="short-url" alt="Download" id="downloadButton"> <small id="copied" class="px-5"></small>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </section>
+    
+    <section class="social-icons">
+        <a href="https://github.com/Amarajah/"><img src="{% static 'github.png' %}"></a>
+        <a href="https://www.linkedin.com/in/ibe-naomi/"><img src="{% static 'linkedin.png' %}"></a>
+        <a href="https://www.twitter.com/Amarajah7"><img src="{% static 'twitter.png' %}"></a>
+        <a href="mailto:naomi.ibeh69@gmail.com"><img src="{% static 'email.png' %}"></a>
+    </section>
+
+    <footer>
+        <p>&copy; 2023 BREVE. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+
+<script>
+    document.getElementById("uploadButton").addEventListener("click", function() {
+        // Perform the URL shortening using Django by making an AJAX request
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "{% url 'shorten' %}", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                // Handle the response from the server
+                var response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    var shortUrl = response.short_url;
+                    console.log("Short URL:", shortUrl);
+                    // Perform any further action with the short URL
+                    // For example, open the short URL in a new tab
+                    window.open(shortUrl, "_blank");
+                } else {
+                    console.log("URL Shortening failed.");
+                }
+            }
+        };
+        xhr.send();
+    });
+</script>
