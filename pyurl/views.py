@@ -13,7 +13,7 @@ class ShortenURLView(View):
       long_url = request.POST.get('url')
       type_tiny = pyshorteners.Shortener()
       short_url = type_tiny.tinyurl.short(long_url)
-      return render(request, 'index.html', short_url)
+      return render(request, 'index.html', {'short_url': short_url})
 
    def get(self, request):
       return render(request, 'index.html')
