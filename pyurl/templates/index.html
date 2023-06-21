@@ -23,7 +23,8 @@
 
     <section class="two">
         <div id="form-wrapper">
-            <form method="POST" action="/shorten/">
+            <form method="POST" action="{% url 'shorten' %}">
+                
                 <div class="formfield">
                 <input type="url" placeholder="Paste your URL here" name="url" required>
                 <img src="{% static 'upload.png' %}" class="images" alt="Upload" id="uploadButton"  onclick="">
